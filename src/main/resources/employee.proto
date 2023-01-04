@@ -8,7 +8,7 @@ message Employee{
 
 	string name = 1;
 	int32 age = 2;
-	string role = 3;
+	optional string role = 3 [default = "MTS"];
 	string dob = 4;
 
 }
