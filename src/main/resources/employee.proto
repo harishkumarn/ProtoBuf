@@ -12,3 +12,17 @@ message Employee{
 	string dob = 4;
 
 }
+
+
+/*
+There is not null type in protocol buffer, so eash data type has its own default value
+
+string ""
+int32,int64,float,double 0
+boolean false
+repeatable an empty list
+map an empty map
+enum oridinal 0 value
+
+Proto can have packages and we can import other schema inside a proto file
+*/
