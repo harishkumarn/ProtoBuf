@@ -4,14 +4,39 @@ option java_package = "com.harish.proto";
 option java_multiple_files = true;
 //option java_outer_classname = "EmployeeBuilder";
 
+message Developer{
+	repeated string techSkills = 1;
+}
+
+message QA{
+	enum Type {
+		MANUAL = 0;// default skill
+		AUTOMATION = 1;
+	}
+
+	Type skill = 1;
+}
+
+
+message PM{
+	repeated string skills = 1;
+}
+
 message Employee{
 
 	string name = 1;
 	int32 age = 2;
-	optional string role = 3 [default = "MTS"];
-	string dob = 4;
+	string role = 4;
+	string dob = 5;
+	
+	oneof skills  {
+		Developer dev = 6;
+		QA qa = 7;
+		PM pm = 8;
+	}
 
 }
+
 
 
 /*
