@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+
+option java_package = "com.harish.grpc.unary";
+
+
+message Name{
+    string name = 1;
+}
+
+message Greet{
+    string greeting = 1;
+    string currentTime = 2;
+}
+
+service Server{
+    rpc getGreeting(Name) returns (Greet);
+}
