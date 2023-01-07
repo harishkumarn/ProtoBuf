@@ -50,4 +50,19 @@ map an empty map
 enum oridinal 0 value
 
 Proto can have packages and we can import other schema inside a proto file
+
+
+Tokens :  Protobuf takes so minimal size because of tokens, 
+		  at the backend the fields are stored based on their token values
+		  1 - 15 takes 1 Byte
+		  16 to 2047 takes 2 Bytes
+		  19000 to 19999 is reserved for internal usage
+		  changing token of existing schema is not recommended
+		  2^99 -1 tokens can be used
+
+
+Primitive types have default values and Composite types have hasField method
+In order to achieve this on primitive types, protobuf has intorduced wrapper classes for all Primitive types 
+the package "google/protobuf/wrappers.proto" has wrapper for all primitive types , Ex : Int32Value, Int64Value etc.,
+
 */
