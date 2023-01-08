@@ -17,6 +17,11 @@ public class GRPCClient {
     
     private ServerGrpc.ServerBlockingStub blockingStub = null;
 
+
+    /**
+     * Stubs are what gRPC clients use to make remote procedure calls
+     * These stubs wrap a channel to make RPCs
+     */
     @BeforeAll
     public void setup(){
         ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 1234)
