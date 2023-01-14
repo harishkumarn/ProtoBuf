@@ -49,4 +49,11 @@ public class GRPCClient {
         System.out.println(greet);
     }
 
+    @Test
+    public void serverStreamTest(){
+        this.blockingStub.getGreetings(Name.newBuilder().setName("Harish Kumar").build()).
+                                        forEachRemaining(a ->{
+                                            System.out.println(a);
+                                        });                                   
+    }
 }
