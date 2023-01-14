@@ -7,6 +7,7 @@ option java_package = "com.harish.grpc.unary";
 
 message Name{
     string name = 1;
+    string language =  2 ;
 }
 
 message Greet{

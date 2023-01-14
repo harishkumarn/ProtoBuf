@@ -7,6 +7,7 @@ option java_package = "com.harish.grpc.unary";
 
 message Name{
     string name = 1;
+    string language =  2 ;	
 }
 
 message Greet{
@@ -19,6 +20,6 @@ service Server{
     rpc getGreeting(Name) returns (Greet);
 
     //server streaming
-//    rpc getGreetings(Name) returns ( stream Greet);
+    rpc getGreetings(Name) returns ( stream Greet);
 }
  

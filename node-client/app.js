@@ -9,6 +9,9 @@ const clientStub = grpc.loadPackageDefinition(packageDefinition).Server;
 
 const client = new clientStub("localhost:1234",grpc.credentials.createInsecure());
 
-client.getGreeting({name:"Harish Kumar N"},(error, greeting)=>{
+client.getGreeting({language:"Eng",name:"Harish Kumar N"},(error, greeting)=>{
+	if(greeting)
 	console.log(greeting);
+	else
+	console.log(error);
 });
