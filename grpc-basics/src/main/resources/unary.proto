@@ -19,6 +19,6 @@ service Server{
     rpc getGreeting(Name) returns (Greet);
 
     //server streaming
-    //rpc getGreetings(Name) returns ( stream Greet);
+    rpc getGreetings(Name) returns ( stream Greet);
 }
  
