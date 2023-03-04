@@ -10,12 +10,21 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 import com.grpc.observers.NameRequestObserver;
-
+import java.util.HashMap;
 
 public class App extends ServerGrpc.ServerImplBase
 {
 
     String[] langs = new String[]{"Vanakkam ", "Namaskaram ","Namaste ", "Hello ","Adios "};
+    public static HashMap<String, String> greetMap = new HashMap<String,String>();
+
+    static{
+        greetMap.put("Eng","Hello");
+        greetMap.put("Tam","Vanakkam");
+        greetMap.put("Tel","Namaskaram");
+        greetMap.put("Hin","Namaste");
+        greetMap.put("Spa","Adios");
+    }
 
     @Override
     public void getGreeting(Name request, StreamObserver<Greet> responseObserver){
@@ -24,12 +33,13 @@ public class App extends ServerGrpc.ServerImplBase
             
             responseObserver.onError(new Exception("Bruh!! send some input !!"));
             return;
+        }else if(!greetMap.containsKey(request.getLanguage())){
+            responseObserver.onError(new Exception("Bruh!! can't translate !!"));
+            return;
         }
 
-
-
         Greet greet = Greet.newBuilder()
-                    .setGreeting("Hello " + request.getName() + "!!")
+                    .setGreeting(greetMap.get(request.getLanguage()) + request.getName() + "!!")
                     .setCurrentTime(LocalDate.now().toString() + " " + LocalTime.now().toString())
                     .build();
         

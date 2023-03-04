@@ -25,9 +25,8 @@ switch(process.argv[2]){
 				console.log(err);
 			}
 		});
-
 		for(var i = 0 ; i < 4; ++i){
-			call.write({language:"",name:"Harish Kumar N " + i.toString()});
+			call.write({language:"Tam",name:"Harish Kumar N " + i.toString()});
 		}
 		call.end();
 		break;
