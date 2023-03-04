@@ -71,4 +71,13 @@ public class GRPCClient {
     public void serverStreamTest(){
         this.nonBlockingStub.getGreetings(Name.newBuilder().setName("Harish Kumar").build(), new GreetResponseObserver());
     }
+
+    @Test
+    public void biDirectionalStreamTest(){
+        StreamObserver<Name> req = this.nonBlockingStub.greetMultiple(new GreetResponseObserver());
+        for(int i = 0 ; i < 4; ++i){
+            req.onNext(Name.newBuilder().setLanguage("English").setName("Harish " + i).build());
+        }
+        req.onCompleted();
+    }
 }

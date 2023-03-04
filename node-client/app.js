@@ -39,5 +39,17 @@ switch(process.argv[2]){
 		});
 		break;
 	case "bidirectional_stream":
+		var call = client.greetMultiple();
+
+		call.on("data",console.log)
+		call.on("error",console.log);
+		call.on("end",()=>{
+			console.log("Saynoara !!");
+		});
+		var langs = ["Tam","Eng","Tel","Hin","Spa"];
+		for(var lang of langs){
+			call.write({language:lang,name:"Harish Kumar N "});
+		}
+		call.end();
 		break;
 };

@@ -27,6 +27,6 @@ service Server{
 
     
     //Bi directional streaming
-    //rpc greetMultiple(stream Name) returns(stream Greet);
+    rpc greetMultiple(stream Name) returns(stream Greet);
 }
  

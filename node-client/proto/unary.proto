@@ -24,5 +24,8 @@ service Server{
 
     //client streaming
     rpc greetAllAtOnce(stream Name) returns(Greet);
+
+    //bidirectional streaming
+    rpc greetMultiple(stream Name) returns(stream Greet);
 }
  

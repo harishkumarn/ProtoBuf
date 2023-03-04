@@ -14,8 +14,6 @@ import java.util.HashMap;
 
 public class App extends ServerGrpc.ServerImplBase
 {
-
-    String[] langs = new String[]{"Vanakkam ", "Namaskaram ","Namaste ", "Hello ","Adios "};
     public static HashMap<String, String> greetMap = new HashMap<String,String>();
 
     static{
@@ -49,13 +47,13 @@ public class App extends ServerGrpc.ServerImplBase
     }
     @Override
     public StreamObserver<Name> greetAllAtOnce(StreamObserver<Greet> resStreamObserver){
-        return new NameRequestObserver(resStreamObserver);
+        return new NameRequestObserver(resStreamObserver, false);
     }
 
     @Override
     public void getGreetings(Name req, StreamObserver<Greet> resStreamObserver){
         try{
-            for(String lang : langs){
+            for(String lang : greetMap.values()){
                 resStreamObserver.onNext(Greet.newBuilder().setGreeting(lang + " " + req.getName())
                                 .setCurrentTime(LocalDate.now().toString() + " " + LocalTime.now().toString())
                                 .build());
@@ -63,5 +61,10 @@ public class App extends ServerGrpc.ServerImplBase
             }
         }catch(InterruptedException e){}
         resStreamObserver.onCompleted();
+    }
+
+    @Override
+    public StreamObserver<Name> greetMultiple(StreamObserver<Greet> resStreamObserver){
+        return new NameRequestObserver(resStreamObserver, true);
     }
 }

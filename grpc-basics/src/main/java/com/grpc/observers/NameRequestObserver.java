@@ -18,12 +18,15 @@ public class NameRequestObserver implements StreamObserver<Name>{
 
     StreamObserver<Greet> respObs;
 
+    boolean bi = false;
+
     List<String> people = new ArrayList<String>();
 
     List<String> langs = new ArrayList<String>();
 
-    public NameRequestObserver(StreamObserver<Greet> resp){
+    public NameRequestObserver(StreamObserver<Greet> resp, boolean bi){
         this.respObs = resp;
+        this.bi = bi;
     }
 
     @Override
@@ -35,8 +38,19 @@ public class NameRequestObserver implements StreamObserver<Name>{
             respObs.onError(new Exception("Bruh!! can't translate !!"));
             return;
         }
-        people.add(name.getName());
-        langs.add(name.getLanguage());
+        if(bi){
+            try{
+                Greet greet = Greet.newBuilder()
+                    .setGreeting(new StringBuilder().append(App.greetMap.get(name.getLanguage())).append(" ! ").append(name.getName()).toString())
+                    .setCurrentTime(LocalDate.now().toString() + " " + LocalTime.now().toString())
+                    .build();
+                respObs.onNext(greet);
+                Thread.sleep(1000);
+            }catch(InterruptedException e){}
+        }else{
+            people.add(name.getName());
+            langs.add(name.getLanguage());
+        }
     }
 
     @Override
@@ -45,11 +59,13 @@ public class NameRequestObserver implements StreamObserver<Name>{
     @Override
     public void onCompleted(){
         Iterator<String> itr = langs.iterator();
-        Greet greet = Greet.newBuilder()
-                    .setGreeting(new StringBuilder().append(App.greetMap.get(itr.next())).append(people.stream().collect(Collectors.joining(" "))).toString())
+        if(!bi){
+            Greet greet = Greet.newBuilder()
+                    .setGreeting(new StringBuilder().append(App.greetMap.get(itr.next())).append(" ! ").append(people.stream().collect(Collectors.joining(" "))).toString())
                     .setCurrentTime(LocalDate.now().toString() + " " + LocalTime.now().toString())
                     .build();
-        respObs.onNext(greet);
+            respObs.onNext(greet);
+        }
         respObs.onCompleted();
     }
 }
