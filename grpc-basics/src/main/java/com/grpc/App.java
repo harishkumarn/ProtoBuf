@@ -1,14 +1,15 @@
 package com.grpc;
 
-
 import com.harish.grpc.unary.ServerGrpc;
 import com.harish.grpc.unary.Name;
-import com.google.rpc.Status;
 import com.harish.grpc.unary.Greet;
+
 import io.grpc.stub.StreamObserver;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+
+import com.grpc.observers.NameRequestObserver;
 
 
 public class App extends ServerGrpc.ServerImplBase
@@ -25,6 +26,8 @@ public class App extends ServerGrpc.ServerImplBase
             return;
         }
 
+
+
         Greet greet = Greet.newBuilder()
                     .setGreeting("Hello " + request.getName() + "!!")
                     .setCurrentTime(LocalDate.now().toString() + " " + LocalTime.now().toString())
@@ -34,21 +37,21 @@ public class App extends ServerGrpc.ServerImplBase
         responseObserver.onCompleted();
 
     }
+    @Override
+    public StreamObserver<Name> greetAllAtOnce(StreamObserver<Greet> resStreamObserver){
+        return new NameRequestObserver(resStreamObserver);
+    }
 
     @Override
-    public void getGreetings(Name requName, StreamObserver<Greet> responseObserver) {
-        for(String greet : langs){
-            try{
-                Greet newGreet = Greet.newBuilder()
-                                .setGreeting(greet +requName.getName() )
+    public void getGreetings(Name req, StreamObserver<Greet> resStreamObserver){
+        try{
+            for(String lang : langs){
+                resStreamObserver.onNext(Greet.newBuilder().setGreeting(lang + " " + req.getName())
                                 .setCurrentTime(LocalDate.now().toString() + " " + LocalTime.now().toString())
-                                .build();
-            
-                responseObserver.onNext(newGreet);
+                                .build());
                 Thread.sleep(1000);
-            }catch(Exception e){}
-        }
-        responseObserver.onCompleted();
-    } 
-   
+            }
+        }catch(InterruptedException e){}
+        resStreamObserver.onCompleted();
+    }
 }

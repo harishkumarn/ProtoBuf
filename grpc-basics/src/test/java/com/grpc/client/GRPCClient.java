@@ -15,10 +15,17 @@ import io.grpc.ManagedChannel;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
+import com.grpc.observers.GreetResponseObserver;
+import io.grpc.stub.StreamObserver;
+
+
+
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class GRPCClient {
     
     private ServerGrpc.ServerBlockingStub blockingStub = null;
+
+    private ServerGrpc.ServerStub nonBlockingStub = null;
 
 
     private final ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -34,6 +41,8 @@ public class GRPCClient {
                               .build();
         
         this.blockingStub = ServerGrpc.newBlockingStub(channel);
+
+        this.nonBlockingStub = ServerGrpc.newStub(channel);
         System.setOut(new PrintStream(out));
     }
 
@@ -43,17 +52,23 @@ public class GRPCClient {
     }
 
     @Test
-    public void greetTest(){
+    public void unaryTest(){
         Greet greet = this.blockingStub.getGreeting(Name.newBuilder().setName("Harish Kumar").build());
 
         System.out.println(greet);
     }
 
     @Test
+    public void clientStreamTest(){
+        StreamObserver<Name> req = this.nonBlockingStub.greetAllAtOnce(new GreetResponseObserver());
+        for(int i = 0 ; i < 4; ++i){
+            req.onNext(Name.newBuilder().setLanguage("English").setName("Harish " + i).build());
+        }
+        req.onCompleted();
+    }
+
+    @Test 
     public void serverStreamTest(){
-        this.blockingStub.getGreetings(Name.newBuilder().setName("Harish Kumar").build()).
-                                        forEachRemaining(a ->{
-                                            System.out.println(a);
-                                        });                                   
+        this.nonBlockingStub.getGreetings(Name.newBuilder().setName("Harish Kumar").build(), new GreetResponseObserver());
     }
 }
