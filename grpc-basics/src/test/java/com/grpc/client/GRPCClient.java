@@ -36,7 +36,7 @@ public class GRPCClient {
      */
     @BeforeAll
     public void setup(){
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 1234)
+        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 8585)
                               .usePlaintext()
                               .build();
         
