@@ -7,7 +7,7 @@ var packageDefinition = protoLoader.loadSync(PROTO_PATH);
 
 const clientStub = grpc.loadPackageDefinition(packageDefinition).Server;
 
-const client = new clientStub("localhost:8585",grpc.credentials.createInsecure());
+const client = new clientStub("localhost:4936",grpc.credentials.createInsecure());
 switch(process.argv[2]){
 	case "unary":
 		client.getGreeting({language:"Eng",name:"Harish Kumar N"},(error, greeting)=>{
