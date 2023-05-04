@@ -24,6 +24,7 @@ public class App extends ServerGrpc.ServerImplBase
         greetMap.put("Spa","Adios");
     }
 
+    // Unary
     @Override
     public void getGreeting(Name request, StreamObserver<Greet> responseObserver){
 
@@ -45,11 +46,14 @@ public class App extends ServerGrpc.ServerImplBase
         responseObserver.onCompleted();
 
     }
+
+    // Bidirectional streaming
     @Override
     public StreamObserver<Name> greetAllAtOnce(StreamObserver<Greet> resStreamObserver){
         return new NameRequestObserver(resStreamObserver, false);
     }
 
+    //Server streaming
     @Override
     public void getGreetings(Name req, StreamObserver<Greet> resStreamObserver){
         try{
@@ -63,6 +67,7 @@ public class App extends ServerGrpc.ServerImplBase
         resStreamObserver.onCompleted();
     }
 
+    //Client streaming
     @Override
     public StreamObserver<Name> greetMultiple(StreamObserver<Greet> resStreamObserver){
         return new NameRequestObserver(resStreamObserver, true);
