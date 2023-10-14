@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option go_package = "pb/spaceinventory";
+
+message Station {
+  string name = 1;
+  string location = 2;
+  int32 station_id = 3;
+}
+
+message GetStationListRequest {}
+message GetStationListResponse { repeated Station stations = 1; }
+
+
+service SpaceService {
+  rpc GetStationList(GetStationListRequest) returns (GetStationListResponse) {}
+}
