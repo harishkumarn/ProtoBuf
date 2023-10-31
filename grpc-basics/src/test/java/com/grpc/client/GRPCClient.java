@@ -10,10 +10,12 @@ import com.harish.grpc.unary.Greet;
 import com.harish.grpc.unary.ServerGrpc;
 
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.Deadline;
 import io.grpc.ManagedChannel;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.concurrent.TimeUnit;
 
 import com.grpc.observers.GreetResponseObserver;
 import io.grpc.stub.StreamObserver;
@@ -53,7 +55,9 @@ public class GRPCClient {
 
     @Test
     public void unaryTest(){
-        Greet greet = this.blockingStub.getGreeting(Name.newBuilder().setName("Harish Kumar").build());
+        Greet greet = this.blockingStub
+                                    .withDeadline(Deadline.after(2, TimeUnit.SECONDS))
+                                    .getGreeting(Name.newBuilder().setName("Harish Kumar").build());
 
         System.out.println(greet);
     }
