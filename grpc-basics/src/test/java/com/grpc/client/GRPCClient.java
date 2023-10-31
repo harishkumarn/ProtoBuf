@@ -17,6 +17,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.concurrent.TimeUnit;
 
+import com.grpc.interceptor.SampleInterceptor;
 import com.grpc.observers.GreetResponseObserver;
 import io.grpc.stub.StreamObserver;
 
@@ -73,7 +74,9 @@ public class GRPCClient {
 
     @Test 
     public void serverStreamTest(){
-        this.nonBlockingStub.getGreetings(Name.newBuilder().setName("Harish Kumar").build(), new GreetResponseObserver());
+        this.nonBlockingStub
+            .withInterceptors(new SampleInterceptor())
+            .getGreetings(Name.newBuilder().setName("Harish Kumar").build(), new GreetResponseObserver());
     }
 
     @Test
